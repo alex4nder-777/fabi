@@ -1,24 +1,27 @@
 const envelope = document.querySelector('.envelope-wrapper');
 const letter = document.querySelector('.letter');
 const musica = document.getElementById('musica');
+const heart = document.querySelector('.heart');
 
 let musicaIniciada = false;
 
-document.addEventListener('pointerdown', () => {
+// ❤️ Música SOLO al tocar el corazón
+heart.addEventListener('click', () => {
     if (!musicaIniciada) {
         musica.volume = 0.4;
         musica.play().then(() => {
             musicaIniciada = true;
-        }).catch(() => {});
+        }).catch(err => {
+            console.log("Error al reproducir audio:", err);
+        });
     }
-}, { once: true });
+});
 
 document.addEventListener('click', (e) => {
     if (
         e.target.matches(".envelope") || 
         e.target.matches(".tap-right") || 
-        e.target.matches(".tap-left") || 
-        e.target.matches(".heart")
+        e.target.matches(".tap-left")
     ) {
         envelope.classList.toggle('flap');
 
