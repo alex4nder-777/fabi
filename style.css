@@ -224,6 +224,140 @@ h1 {
         border-right: 150px solid transparent;
         border-left: 150px solid transparent;
 }
+/* 🌷 Contenedor oculto hasta abrir la carta */
+.oculto {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 🌷 Tulipán */
+.amor-container {
+    margin-top: 40px;
+    text-align: center;
+    font-family: "Marck Script", serif;
+    transition: opacity 1s ease;
+}
+
+.tulipan {
+    position: relative;
+    width: 120px;
+    height: 220px;
+    margin: 0 auto 20px;
+}
+
+/* 🌿 Tallo */
+.tallo {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 6px;
+    height: 0;
+    background: #4caf50;
+    transform: translateX(-50%);
+}
+
+/* 🍃 Hojas */
+.hoja {
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    background: #66bb6a;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.hoja.izquierda {
+    left: 0;
+    bottom: 70px;
+    transform: rotate(-30deg);
+}
+
+.hoja.derecha {
+    right: 0;
+    bottom: 100px;
+    transform: rotate(30deg);
+}
+
+/* 🌷 Flor del tulipán */
+.flor {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 50px;
+    height: 60px;
+    background: #ff477e;
+    border-radius: 0 0 25px 25px;
+    transform: translateX(-50%) scaleY(0);
+}
+
+/* 🌸 Animaciones activas */
+.florecer .tallo {
+    animation: crecerTallo 2.5s forwards;
+}
+
+.florecer .hoja {
+    animation: aparecer 1s forwards;
+}
+
+.florecer .hoja.izquierda { animation-delay: 1.8s; }
+.florecer .hoja.derecha { animation-delay: 2.1s; }
+
+.florecer .flor {
+    animation: abrirTulipan 1.5s forwards;
+    animation-delay: 2.5s;
+}
+
+/* ✨ Keyframes */
+@keyframes crecerTallo {
+    to { height: 160px; }
+}
+
+@keyframes aparecer {
+    to { opacity: 1; }
+}
+
+@keyframes abrirTulipan {
+    to { transform: translateX(-50%) scaleY(1); }
+}
+
+/* 🌸 Pétalos flotando */
+#petalos {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.petalo {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #ff9bbd;
+    border-radius: 50% 50% 50% 0;
+    opacity: 0.8;
+    animation: caer linear infinite;
+}
+
+@keyframes caer {
+    from {
+        transform: translateY(-10vh) rotate(0deg);
+    }
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+/* ⏳ Contador */
+.contador {
+    font-size: 26px;
+    color: #444;
+}
+
+.contador span {
+    font-size: 32px;
+    color: #ff477e;
+}
+
 
 }
 

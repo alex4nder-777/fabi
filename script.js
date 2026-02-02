@@ -3,6 +3,48 @@ const letter = document.querySelector('.letter');
 const musica = document.getElementById('musica');
 const heart = document.querySelector('.heart');
 
+// 🌷 Florecer al abrir la carta
+const amor = document.getElementById("amor");
+const petalos = document.getElementById("petalos");
+
+function iniciarAmor() {
+    amor.classList.remove("oculto");
+    amor.classList.add("florecer");
+    crearPetalos();
+}
+
+// ⏳ Contador desde 25 de julio 7:09 PM
+const inicioAmor = new Date(2023, 6, 25, 19, 9); 
+// Mes 6 = julio (empieza en 0)
+
+function actualizarTiempo() {
+    const ahora = new Date();
+    let diff = ahora - inicioAmor;
+
+    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff %= (1000 * 60 * 60 * 24);
+    const horas = Math.floor(diff / (1000 * 60 * 60));
+    diff %= (1000 * 60 * 60);
+    const minutos = Math.floor(diff / (1000 * 60));
+
+    document.getElementById("tiempo").textContent =
+        `${dias} días, ${horas} horas y ${minutos} minutos`;
+}
+
+setInterval(actualizarTiempo, 60000);
+actualizarTiempo();
+
+// 🌸 Crear pétalos flotando
+function crearPetalos() {
+    for (let i = 0; i < 25; i++) {
+        const p = document.createElement("div");
+        p.classList.add("petalo");
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDuration = 5 + Math.random() * 5 + "s";
+        p.style.animationDelay = Math.random() * 5 + "s";
+        petalos.appendChild(p);
+    }
+}
 let musicaIniciada = false;
 
 // ❤️ Click en el corazón: música + abrir sobre
@@ -36,6 +78,7 @@ document.addEventListener('click', (e) => {
             setTimeout(() => {
                 letter.classList.remove('letter-opening');
                 letter.classList.add('opened');
+                iniciarAmor();
             }, 500);
 
             envelope.classList.add("disable-envelope");
