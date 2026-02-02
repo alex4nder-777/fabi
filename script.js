@@ -5,16 +5,20 @@ const heart = document.querySelector('.heart');
 
 let musicaIniciada = false;
 
-// ❤️ Música SOLO al tocar el corazón
-heart.addEventListener('click', () => {
+// ❤️ Click en el corazón: música + abrir sobre
+heart.addEventListener('click', (e) => {
+    e.stopPropagation(); // evita conflictos
+
+    // 🎵 Música
     if (!musicaIniciada) {
         musica.volume = 0.4;
         musica.play().then(() => {
             musicaIniciada = true;
-        }).catch(err => {
-            console.log("Error al reproducir audio:", err);
-        });
+        }).catch(() => {});
     }
+
+    // ✉️ Abrir / cerrar sobre
+    envelope.classList.toggle('flap');
 });
 
 document.addEventListener('click', (e) => {
