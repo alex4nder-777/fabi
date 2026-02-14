@@ -3,16 +3,16 @@ const letter = document.querySelector('.letter');
 const musica = document.getElementById('musica');
 const heart = document.querySelector('.heart');
 
-// 🌷 Amor
 const amor = document.getElementById("amor");
-const petalos = document.getElementById("petalos");
+const petalosContainer = document.getElementById("petalos");
 
 let musicaIniciada = false;
 let cartaAbierta = false;
-let amorIniciado = false;
+let petalosIniciados = false;
 
-// ⏳ Fecha inicio amor (25 julio 2025 7:09 PM)
-const inicioAmor = new Date(2025, 6, 25, 19, 9);
+/* ================= CONTADOR ================= */
+
+const inicioAmor = new Date(2023, 6, 25, 19, 9);
 
 function actualizarTiempo() {
     const ahora = new Date();
@@ -31,72 +31,90 @@ function actualizarTiempo() {
 setInterval(actualizarTiempo, 60000);
 actualizarTiempo();
 
-// 🌸 Pétalos
-function crearPetalos() {
-    for (let i = 0; i < 25; i++) {
-        const p = document.createElement("div");
-        p.classList.add("petalo");
-        p.style.left = Math.random() * 100 + "vw";
-        p.style.animationDuration = 5 + Math.random() * 5 + "s";
-        p.style.animationDelay = Math.random() * 5 + "s";
-        petalos.appendChild(p);
-    }
+/* ================= PETALOS ================= */
+
+function crearPetalo() {
+  const petalo = document.createElement("div");
+  petalo.classList.add("petalo");
+
+  petalo.style.left = Math.random() * 100 + "vw";
+  petalo.style.animationDuration = 6 + Math.random() * 6 + "s";
+  petalo.style.opacity = Math.random();
+
+  petalosContainer.appendChild(petalo);
+
+  setTimeout(() => petalo.remove(), 12000);
 }
+
+function iniciarPetalos() {
+  if (petalosIniciados) return;
+  petalosIniciados = true;
+  setInterval(crearPetalo, 300);
+}
+
+/* ================= INICIAR AMOR ================= */
 
 function iniciarAmor() {
-    if (amorIniciado) return;
-
     amor.classList.remove("oculto");
     amor.classList.add("florecer");
-    crearPetalos();
-
-    amorIniciado = true;
+    iniciarPetalos();
 }
 
-// ❤️ Click en el corazón: música + abrir sobre
-heart.addEventListener('click', (e) => {
-    e.stopPropagation(); // evita conflictos
+/* ================= CORAZON ================= */
 
-    // 🎵 Música
+heart.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    // Abrir sobre
+    envelope.classList.add("flap");
+
+    // Música solo una vez
     if (!musicaIniciada) {
         musica.volume = 0.4;
-        musica.play().then(() => {
-            musicaIniciada = true;
-        }).catch(() => {});
+        musica.play().catch(() => {});
+        musicaIniciada = true;
     }
 
-    // ✉️ Abrir / cerrar sobre
-    envelope.classList.toggle('flap');
+    // Si la carta no está abierta → abrirla
+    if (!cartaAbierta) {
+        letter.classList.add("letter-opening");
+
+        setTimeout(() => {
+            letter.classList.remove("letter-opening");
+            letter.classList.add("opened");
+        }, 500);
+
+        iniciarAmor();
+        cartaAbierta = true;
+    }
 });
 
-document.addEventListener('click', (e) => {
-    if (
-        e.target.matches(".envelope") || 
-        e.target.matches(".tap-right") || 
-        e.target.matches(".tap-left")
-    ) {
-        envelope.classList.toggle('flap');
+/* ================= SOBRE ================= */
 
-    } else if (e.target.matches(".envelope *")) {
-        if (!letter.classList.contains('opened')) {
-            letter.classList.add("letter-opening");
+document.querySelector('.envelope').addEventListener("click", (e) => {
+    e.stopPropagation();
 
-            setTimeout(() => {
-                letter.classList.remove('letter-opening');
-                letter.classList.add('opened');
-                iniciarAmor();
-            }, 500);
+    if (!envelope.classList.contains("flap")) return;
 
-            envelope.classList.add("disable-envelope");
-        } else {
-            letter.classList.add('closing-letter');
-            envelope.classList.remove("disable-envelope");
-            letter.classList.remove('opened');
+    if (!cartaAbierta) {
+        letter.classList.add("letter-opening");
 
-            setTimeout(() => {
-                letter.classList.remove('closing-letter');
-                letter.classList.remove('opened');
-            }, 500);
-        }
+        setTimeout(() => {
+            letter.classList.remove("letter-opening");
+            letter.classList.add("opened");
+        }, 500);
+
+        iniciarAmor();
+        cartaAbierta = true;
+
+    } else {
+        letter.classList.add("closing-letter");
+
+        setTimeout(() => {
+            letter.classList.remove("closing-letter");
+            letter.classList.remove("opened");
+        }, 500);
+
+        cartaAbierta = false;
     }
-});                      
+});
