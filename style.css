@@ -57,10 +57,9 @@ h1 {
   position: relative;
   width: 400px;
   height: 300px;
-  z-index: 1;
 }
 
-
+/* FLAP */
 .envelope::before {
   content: "";
   position: absolute;
@@ -89,45 +88,53 @@ h1 {
   clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
 
+/* Cuando se abre el sobre */
 .flap .envelope::before {
   transform: rotateX(180deg);
-  z-index: 0;
+  z-index: 0; /* baja el flap */
 }
 
 /* ================= CARTA INTERIOR ================= */
-.letter {
+/* --- Reemplazado para que coincida con el segundo CSS --- */
+.envelope > .letter {
   position: absolute;
   bottom: 0;
   width: 100%;
   height: 100%;
-  background: white;
+  background: var(--primary);
+  text-align: center;
+  box-shadow: 0 0 5px var(--shadow-color);
   padding: 20px;
   border-radius: 10px;
-  transition: transform 0.5s ease;
-  transform: translateY(0);
-  z-index: 2;
+  transition: transform .5s ease-in-out;
 }
 
-
-.letter {
-  transform: translateY(0);
-}
-
-.envelope-wrapper.flap .letter.opened {
-  transform: translateY(-290px);
-  z-index: 5;
-}
-
-
-
-
-.text {
+/* Estilo del contenido interno de la carta */
+.envelope > .letter > .text {
   font-family: Calibri, sans-serif;
   font-size: 13px;
   border: 3px dotted var(--txt-color);
   padding: 10px;
   height: 100%;
-  overflow-y: auto;
+  line-height: 16px;
+  cursor: pointer;
+  overflow: auto;
+}
+
+/* Estados / clases para apertura/cierre (coincidentes con el segundo CSS) */
+.letter.letter-opening {
+  transform: translateY(-290px);
+  transition: transform .5s ease-in-out;
+}
+
+.letter.closing-letter {
+  transform: translateY(-290px);
+  transition: transform .5s ease-in-out;
+  z-index: 10000;
+}
+
+.letter.opened {
+  z-index: 10000;
 }
 
 /* ================= CORAZON ================= */
