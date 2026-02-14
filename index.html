@@ -10,7 +10,11 @@
     <title>Carta para Fabi</title>
 </head>
 <body>
-    <h1>¡Feliz San Valentín! ❤️</h1>
+    <h1>
+    ¡Feliz San Valentín! 
+    <span id="playHeart" class="play-heart">❤️</span>
+    </h1>
+
     <div class="container">
         <div class="envelope-wrapper ">
             <div class="envelope">
@@ -46,7 +50,8 @@
 
 <div id="petalos"></div>
     
-    <audio id="musica" loop preload="auto">
+    <audio id="musica" loop playsinline>
+
         <source src="fabi.mp3" type="audio/mpeg">
     </audio>
     <script src="script.js"></script>

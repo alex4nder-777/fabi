@@ -1,7 +1,8 @@
 const envelope = document.querySelector('.envelope-wrapper');
 const letter = document.querySelector('.letter');
 const musica = document.getElementById('musica');
-const heart = document.querySelector('.heart');
+const heart = document.querySelector('.heart'); // corazón del sobre (solo animación)
+const playHeart = document.getElementById("playHeart"); // ❤️ del h1
 
 // 🌷 Florecer al abrir la carta
 const amor = document.getElementById("amor");
@@ -14,7 +15,8 @@ function iniciarAmor() {
 }
 
 // ⏳ Contador desde 25 de julio 7:09 PM
-const inicioAmor = new Date(2025, 6, 25, 19, 9); // Mes 6 = julio (empieza en 0)
+const inicioAmor = new Date(2025, 6, 25, 19, 9); 
+// Mes 6 = julio (empieza en 0)
 
 function actualizarTiempo() {
     const ahora = new Date();
@@ -44,10 +46,14 @@ function crearPetalos() {
         petalos.appendChild(p);
     }
 }
+
+/* =========================
+   🎵 MÚSICA (NUEVO BOTÓN ❤️)
+========================= */
+
 let musicaIniciada = false;
 
-heart.addEventListener('click', function(e) {
-    e.stopPropagation();
+playHeart.addEventListener("click", function () {
 
     if (!musicaIniciada) {
         musica.volume = 0.4;
@@ -55,22 +61,33 @@ heart.addEventListener('click', function(e) {
         musica.play()
             .then(() => {
                 musicaIniciada = true;
-                envelope.classList.toggle('flap');
+                playHeart.textContent = "💖"; // cambia cuando suena
             })
             .catch(err => {
                 console.log("Error reproduciendo:", err);
             });
 
     } else {
-        envelope.classList.toggle('flap');
+        if (musica.paused) {
+            musica.play();
+            playHeart.textContent = "💖";
+        } else {
+            musica.pause();
+            playHeart.textContent = "❤️";
+        }
     }
 });
 
+/* =========================
+   ✉️ SOBRE (sin música)
+========================= */
 
-// Si preferís evitar que tanto pointerdown como click llamen dos veces
-// podés desactivar alguno, pero como usamos bandera musicaIniciada no causa problema.
+// ❤️ Corazón del sobre ahora solo abre/cierra
+heart.addEventListener('click', (e) => {
+    e.stopPropagation();
+    envelope.classList.toggle('flap');
+});
 
-// ----- manejo del resto de interacciones -----
 document.addEventListener('click', (e) => {
     if (
         e.target.matches(".envelope") || 
