@@ -14,8 +14,7 @@ function iniciarAmor() {
 }
 
 // ⏳ Contador desde 25 de julio 7:09 PM
-const inicioAmor = new Date(2025, 6, 25, 19, 9); 
-// Mes 6 = julio (empieza en 0)
+const inicioAmor = new Date(2025, 6, 25, 19, 9); // Mes 6 = julio (empieza en 0)
 
 function actualizarTiempo() {
     const ahora = new Date();
@@ -45,24 +44,61 @@ function crearPetalos() {
         petalos.appendChild(p);
     }
 }
+
 let musicaIniciada = false;
 
-// ❤️ Click en el corazón: música + abrir sobre
-heart.addEventListener('click', (e) => {
-    e.stopPropagation(); // evita conflictos
+// Función central para intentar reproducir la música
+function tryPlayMusic() {
+    if (musicaIniciada) return;
 
-    // 🎵 Música
-    if (!musicaIniciada) {
-        musica.volume = 0.4;
-        musica.play().then(() => {
-            musicaIniciada = true;
-        }).catch(() => {});
+    // Intentamos cargar antes (algunos navegadores necesitan esto)
+    try {
+        musica.load();
+    } catch (err) {
+        // no fatal, pero lo logueamos
+        console.warn("audio.load() fallo:", err);
     }
 
-    // ✉️ Abrir / cerrar sobre
-    envelope.classList.toggle('flap');
-});
+    musica.volume = 0.4;
 
+    const playPromise = musica.play();
+
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                musicaIniciada = true;
+                console.log("Reproduciendo musica correctamente");
+            })
+            .catch((err) => {
+                // Esto es importante: el navegador puede rechazar por autoplay policies.
+                console.warn("Play rechazado/capturado:", err);
+            });
+    } else {
+        // En navegadores antiguos donde play no devuelve promesa
+        musicaIniciada = true;
+    }
+}
+
+// ❤️ Click / touch en el corazón: música + abrir sobre
+function onHeartActivate(e) {
+    // Evitamos doble evento (pointer -> click) propagando
+    e.stopPropagation();
+    tryPlayMusic();
+
+    // Toggle del sobre (abrir/cerrar)
+    envelope.classList.toggle('flap');
+}
+
+// Escuchamos varios eventos que cubren la mayoría de dispositivos
+heart.addEventListener('pointerdown', onHeartActivate);
+heart.addEventListener('click', onHeartActivate);
+// Fallback para navegadores que no implementan pointer events correctamente
+heart.addEventListener('touchstart', onHeartActivate);
+
+// Si preferís evitar que tanto pointerdown como click llamen dos veces
+// podés desactivar alguno, pero como usamos bandera musicaIniciada no causa problema.
+
+// ----- manejo del resto de interacciones -----
 document.addEventListener('click', (e) => {
     if (
         e.target.matches(".envelope") || 
