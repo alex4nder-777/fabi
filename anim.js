@@ -11,7 +11,42 @@ let musicaIniciada = false;
 
 
 
+function updateLyrics() {
+  const time = Math.floor(audio.currentTime);
+  const currentLine = lyricsData.find(
+    line => time >= line.time && time < line.time + 5
+  );
+
+  if (currentLine) {
+    lyrics.style.opacity = 1;
+    lyrics.textContent = currentLine.text;
+  } else {
+    lyrics.style.opacity = 0;
+    lyrics.textContent = "";
+  }
+}
+
 setInterval(updateLyrics, 500);
+
+/* ================= CONTADOR ================= */
+const contador = document.getElementById("contador");
+const inicioAmor = new Date("2023-07-25T19:09:00");
+
+function actualizarContador() {
+  const ahora = new Date();
+  const diff = ahora - inicioAmor;
+
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutos = Math.floor((diff / (1000 * 60)) % 60);
+
+  contador.textContent =
+    `Nuestro amor germinó hace ${dias} días, ${horas} horas y ${minutos} minutos 🌱💖`;
+}
+
+setInterval(actualizarContador, 1000);
+actualizarContador();
+
 /* ================= PETALOS ================= */
 function crearPetalo() {
   const petalo = document.createElement("div");
@@ -51,3 +86,12 @@ heart.addEventListener("click", () => {
     }, 500);
   }
 });
+
+/* ================= TITULO ================= */
+setTimeout(() => {
+  const titulo = document.querySelector(".titulo");
+  if (titulo) {
+    titulo.style.animation = "fadeOut 3s forwards";
+    setTimeout(() => (titulo.style.display = "none"), 3000);
+  }
+}, 216000);
