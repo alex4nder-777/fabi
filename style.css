@@ -103,10 +103,11 @@ h1 {
   transition: transform 0.5s ease;
 }
 
-.letter-opening {
-  transform: translateY(-290px);
+.letter {
+  transform: translateY(0);
 }
-.opened {
+
+.envelope-wrapper.flap .letter.opened {
   transform: translateY(-290px);
 }
 
