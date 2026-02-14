@@ -44,56 +44,28 @@ function crearPetalos() {
         petalos.appendChild(p);
     }
 }
-
 let musicaIniciada = false;
 
-// Función central para intentar reproducir la música
-function tryPlayMusic() {
-    if (musicaIniciada) return;
+heart.addEventListener('click', function(e) {
+    e.stopPropagation();
 
-    // Intentamos cargar antes (algunos navegadores necesitan esto)
-    try {
-        musica.load();
-    } catch (err) {
-        // no fatal, pero lo logueamos
-        console.warn("audio.load() fallo:", err);
-    }
+    if (!musicaIniciada) {
+        musica.volume = 0.4;
 
-    musica.volume = 0.4;
-
-    const playPromise = musica.play();
-
-    if (playPromise !== undefined) {
-        playPromise
+        musica.play()
             .then(() => {
                 musicaIniciada = true;
-                console.log("Reproduciendo musica correctamente");
+                envelope.classList.toggle('flap');
             })
-            .catch((err) => {
-                // Esto es importante: el navegador puede rechazar por autoplay policies.
-                console.warn("Play rechazado/capturado:", err);
+            .catch(err => {
+                console.log("Error reproduciendo:", err);
             });
+
     } else {
-        // En navegadores antiguos donde play no devuelve promesa
-        musicaIniciada = true;
+        envelope.classList.toggle('flap');
     }
-}
+});
 
-// ❤️ Click / touch en el corazón: música + abrir sobre
-function onHeartActivate(e) {
-    // Evitamos doble evento (pointer -> click) propagando
-    e.stopPropagation();
-    tryPlayMusic();
-
-    // Toggle del sobre (abrir/cerrar)
-    envelope.classList.toggle('flap');
-}
-
-// Escuchamos varios eventos que cubren la mayoría de dispositivos
-heart.addEventListener('pointerdown', onHeartActivate);
-heart.addEventListener('click', onHeartActivate);
-// Fallback para navegadores que no implementan pointer events correctamente
-heart.addEventListener('touchstart', onHeartActivate);
 
 // Si preferís evitar que tanto pointerdown como click llamen dos veces
 // podés desactivar alguno, pero como usamos bandera musicaIniciada no causa problema.
